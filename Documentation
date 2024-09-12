@@ -1,0 +1,28 @@
+This program simulates a basic LED control system for individual LEDs and groups of LEDs.
+
+LEDSettings Structure: Stores the properties of an individual LED, including:
+
+state: Whether the LED is ON (1) or OFF (0).
+brightness: The brightness level of the LED (0 to 255).
+color: The RGB color value of the LED.
+
+LEDGroup Structure: Manages both the individual LED settings and collective group settings, including:
+
+singleLED: The properties of the individual LED.
+groupState: The state of the whole group (ON or OFF).
+groupBrightness: Overall brightness setting for the group.
+
+Functions:
+initLEDGroup: This function initializes both the individual LED and the group with default values. For instance, the LED and the group start off as OFF, with minimum brightness and the color set to black.
+
+updateLEDGroupSettings: Updates the settings for both the individual LED and the group, allowing you to adjust the state, brightness, and color.
+
+displayLEDGroupStatus: Displays the current settings for the LED and the group, showing whether they are ON/OFF, their brightness levels, and the LED's color.
+
+To compile and test the code on a standard C compiler like GCC:
+
+Compile the code:
+gcc -o led_control led_control.c
+
+Run the executable:
+./led_control
