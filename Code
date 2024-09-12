@@ -1,0 +1,98 @@
+#include <stdio.h>
+
+// Define constants for brightness and default color (black)
+#define MAX_BRIGHTNESS 255
+#define COLOR_BLACK 0x000000
+
+// Structure Definitions
+
+// LEDSettings: This structure represents the properties of an individual LED
+struct LEDSettings {
+    unsigned char state;         // State of the LED (1 for ON, 0 for OFF)
+    unsigned char brightness;    // Brightness level (0 to 255)
+    unsigned long color;         // RGB color encoding (hex value, e.g., 0xFF5733 for orange)
+};
+
+// LEDGroup: This structure represents a group of LEDs with collective settings
+struct LEDGroup {
+    struct LEDSettings singleLED; // Individual LED settings
+    unsigned char groupState;     // Group state (1 for all LEDs ON, 0 for all LEDs OFF)
+    unsigned char groupBrightness; // Group brightness level (adjustment for all LEDs)
+};
+
+// Function to Initialize LED Group
+// This function initializes the LED group and its single LED to default values (OFF, minimum brightness, black color).
+void initLEDGroup(struct LEDGroup *group) {
+    // Initialize individual LED settings
+    (*group).singleLED.state = 0;          // Set LED OFF
+    (*group).singleLED.brightness = 0;     // Minimum brightness
+    (*group).singleLED.color = COLOR_BLACK; // Default color: black
+    
+    // Initialize group settings
+    (*group).groupState = 0;               // All LEDs in the group are OFF
+    (*group).groupBrightness = 0;          // Minimum group brightness
+}
+
+// Function to Update LED Group Settings
+// This function updates both individual LED settings and the group's collective settings based on the provided values.
+void updateLEDGroupSettings(struct LEDGroup *group, 
+                             unsigned char groupState, 
+                             unsigned char groupBrightness, 
+                             unsigned char state, 
+                             unsigned char brightness, 
+                             unsigned long color) {
+    // Update individual LED settings
+    (*group).singleLED.state = state;      // Set the LED state (ON/OFF)
+    (*group).singleLED.brightness = brightness;  // Set the LED brightness
+    (*group).singleLED.color = color;      // Set the LED color
+    
+    // Update group settings
+    (*group).groupState = groupState;      // Set the group state (all ON or all OFF)
+    (*group).groupBrightness = groupBrightness;  // Set the group brightness level
+}
+
+// Function to Display LED Group Status
+// This function prints the current state, brightness, and color of the individual LED,
+// as well as the group's collective state and brightness.
+void displayLEDGroupStatus(const struct LEDGroup *group) {
+    // Print individual LED status
+    if ((*group).singleLED.state == 1) {
+        printf("LED State: ON\n");
+    } else {
+        printf("LED State: OFF\n");
+    }
+    printf("LED Brightness: %d\n", (*group).singleLED.brightness);
+    printf("LED Color: #%06lX\n", (*group).singleLED.color);
+    
+    // Print group status
+    if ((*group).groupState == 1) {
+        printf("Group State: All ON\n");
+    } else {
+        printf("Group State: All OFF\n");
+    }
+    printf("Group Brightness: %d\n", (*group).groupBrightness);
+}
+
+// Main Function
+// Entry point of the program. It initializes the LED group, displays the initial settings,
+// updates the settings, and then displays the updated settings.
+int main() {
+    struct LEDGroup myGroup;
+
+    // Initialize the LED group
+    initLEDGroup(&myGroup);
+    
+    // Display initial status
+    printf("Initial LED Group Status:\n");
+    displayLEDGroupStatus(&myGroup);
+    printf("\n");
+
+    // Update the LED group settings
+    updateLEDGroupSettings(&myGroup, 1, 200, 1, 150, 0xFF5733); // Group ON, brightness 200, LED ON, brightness 150, color orange
+    
+    // Display updated status
+    printf("Updated LED Group Status:\n");
+    displayLEDGroupStatus(&myGroup);
+
+    return 0;
+}
